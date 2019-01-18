@@ -76,9 +76,6 @@ class _AuthPageState extends State<AuthPage> {
       decoration: InputDecoration(
           labelText: 'Confirm Password', filled: true, fillColor: Colors.white),
       obscureText: true,
-      onSaved: (String value) {
-        _formData['password'] = value;
-      },
     );
   }
 
