@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../widgets/Ui_elements/title_default.dart';
 
 class ProductPage extends StatelessWidget {
-  final String title;
-  final String imageUrl;
-  ProductPage(this.title, this.imageUrl);
-  _showWarningDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Are you sure?'),
-            content: Text('This action cannot be undone!'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Cancel'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: Text('Continue'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context, true);
-                },
-              )
-            ],
-          );
-        });
+  final product;
+  ProductPage(this.product);
+  Widget _buildAddressPriceRow(double price) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Melbourne',
+          style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
+        ),
+        Container(
+          child: Text(
+            '|',
+            style: TextStyle(color: Colors.grey),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+        ),
+        Text('\$' + price.toString(),
+            style: TextStyle(fontFamily: 'Oswald', color: Colors.grey))
+      ],
+    );
   }
 
   @override
@@ -37,22 +33,29 @@ class ProductPage extends StatelessWidget {
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
-            title: Text(title),
+            title: Text(product.title),
           ),
           body: Center(
               child: Column(
             children: <Widget>[
-              Image.asset(imageUrl),
-              Container(
-                child: Text(title),
-                padding: EdgeInsets.all(10.0),
+              FadeInImage(
+                image: NetworkImage(product.image),
+                height: 300.0,
+                fit: BoxFit.cover,
+                placeholder: AssetImage('asset/food.jpg'),
               ),
               Container(
-                  child: RaisedButton(
-                      child: Text('Delete'),
-                      color: Theme.of(context).accentColor,
-                      onPressed: () => _showWarningDialog(context)),
-                  padding: EdgeInsets.all(10.0)),
+                child: TitleDefault(product.title),
+                padding: EdgeInsets.all(10.0),
+              ),
+              _buildAddressPriceRow(product.price),
+              Container(
+                child: Text(product.description,
+                    style: TextStyle(color: Colors.grey),
+                    textAlign: TextAlign.center),
+                margin: EdgeInsets.only(top: 10.0),
+                padding: EdgeInsets.all(5.0),
+              ),
             ],
           ))),
       onWillPop: () {

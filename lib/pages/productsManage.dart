@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import './product_create.dart';
+import './product_edit.dart';
 import './product_list.dart';
+import '../scoped-models/main.dart';
 
 class ProductsManage extends StatelessWidget {
-  final Function addProduct;
-  final Function deleteProduct;
-  ProductsManage(this.addProduct, this.deleteProduct);
+  final MainModel model;
+  ProductsManage(this.model);
+  Widget _buildSideDraw(context) {
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Choose'),
+          ),
+          ListTile(
+            leading: Icon(Icons.shop),
+            title: Text('All Products'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/products');
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return DefaultTabController(
         child: Scaffold(
-            drawer: Drawer(
-              child: Column(
-                children: <Widget>[
-                  AppBar(
-                    automaticallyImplyLeading: false,
-                    title: Text('Choose'),
-                  ),
-                  ListTile(
-                    title: Text('All Products'),
-                    onTap: () {
-                      Navigator.pushReplacementNamed(context, '/products');
-                    },
-                  )
-                ],
-              ),
-            ),
+            drawer: _buildSideDraw(context),
             appBar: AppBar(
                 title: Text('Products Manage'),
                 bottom: TabBar(
@@ -37,8 +42,8 @@ class ProductsManage extends StatelessWidget {
                 )),
             body: TabBarView(
               children: <Widget>[
-                ProductCreatePage(addProduct),
-                ProductListPage(),
+                ProductEditPage(),
+                ProductListPage(model),
               ],
             )),
         length: 2); //length means how many tabs we need
